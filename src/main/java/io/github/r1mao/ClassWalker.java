@@ -11,6 +11,7 @@ import org.objectweb.asm.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Stack;
 
 public class ClassWalker extends ClassVisitor
 {
@@ -39,6 +40,9 @@ public class ClassWalker extends ClassVisitor
         private HashSet<BytecodeWrapper> splitPoint=new HashSet<>();
         private boolean shouldSplit=false;
         private ArrayList<Pair<Label,VariableInfo>> startVar=new ArrayList<>(),endVar=new ArrayList<>();
+        private ArrayList<Pair<Label,Label>> tryCatchBlockBound=new ArrayList<>();
+        private ArrayList<Label> tryCatchHandler=new ArrayList<>();
+        private ArrayList<String> exceptionType=new ArrayList<>();
         protected MethodWalker(int api, MethodVisitor methodVisitor)
         {
             super(api,methodVisitor);
@@ -206,6 +210,9 @@ public class ClassWalker extends ClassVisitor
 
             this.pushSplitPointOrLater(handler);
             super.visitTryCatchBlock(start,end,handler,type);
+            this.tryCatchBlockBound.add(new Pair(start,end));
+            this.tryCatchHandler.add(handler);
+            this.exceptionType.add(type);
         }
         public void buildCfg()
         {
@@ -324,6 +331,20 @@ public class ClassWalker extends ClassVisitor
                     assert (!OpcodeInfo.isJump(bytecode.getOpcode())) && (!OpcodeInfo.isReturn(bytecode.getOpcode()));
                 }
             }
+            int i=0;
+            for(Label l:this.tryCatchHandler)
+            {
+
+                BytecodeWrapper wrapper=this.labelMap.get(l);
+                IRBasicBlock block=entryMapping.get(wrapper);
+                assert block!=null;
+                Pair<Label,Label> bound=this.tryCatchBlockBound.get(i);
+                if(this.labelMap.get(bound.getValue())==null)
+                    assert this.cur==bound.getValue();
+                this.method.addTryCatchBlock(this.labelMap.get(bound.getKey()),this.labelMap.get(bound.getValue()),block,this.exceptionType.get(i));
+                i++;
+            }
+
         }
         public void analysisLocalVariables()
         {
@@ -374,14 +395,41 @@ public class ClassWalker extends ClassVisitor
 
             }
         }
+        public void stackAnalysis()
+        {
+            this.method.getUnreachableBlocks();
+            this.method.emulateStack(new Stack<>(),this.method.getEntryBlock());
+            for(Node tryCatch:this.method.getTryCatchHandlerBlocks())
+            {
+                Stack<DataType> context=new Stack();
+                context.push(DataType.TYPE_REFERENCE);
+                this.method.emulateStack(context,(IRBasicBlock) tryCatch);
+            }
+            this.method.analysisStack(0,this.method.getEntryBlock());
+            for(Node tryCatch:this.method.getTryCatchHandlerBlocks())
+            {
+                this.method.analysisStack(4,(IRBasicBlock) tryCatch);
+            }
+            for(Node n:this.method.getNodes())
+            {
+                IRBasicBlock bb=(IRBasicBlock) n;
+                if(this.method.getUnreachableBlocks().contains(bb))
+                    continue;
+                assert bb.getStackAddress()!=0xdeadbeef && bb.getStackOffset()!=0xdeadbeef;
+            }
+
+        }
+        public void generateIRCode()
+        {
+            this.method.generateIRCode();
+        }
         public void visitEnd()
         {
+
             this.buildCfg();
             this.analysisLocalVariables();
-            this.method.getUnreachableBlocks();
-            this.method.emulateStack();
-            this.method.analysisStack();
-            this.method.generateIRCode();
+            this.stackAnalysis();
+            this.generateIRCode();
             //System.out.println("calculate stack offset finished");
 
             /*for(Node n:this.method.getNodes())

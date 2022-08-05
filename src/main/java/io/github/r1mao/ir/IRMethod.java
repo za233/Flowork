@@ -14,7 +14,9 @@ public class IRMethod extends Graph
     private String name,desc,signature;
     private String[] exceptions;
     private ArrayList<Node> unreachableBlock;
-
+    private ArrayList<Node> tryCatchHandlerBlock=new ArrayList<>();
+    private ArrayList<Pair<BytecodeWrapper,BytecodeWrapper>> tryCatchBound=new ArrayList<>();
+    private ArrayList<String> tryCatchBlockType=new ArrayList<>();
     public IRMethod(int access, String name, String desc, String signature, String[] exceptions)
     {
         this.access=access;
@@ -31,16 +33,26 @@ public class IRMethod extends Graph
             arr.add((IRBasicBlock) n);
         return arr;
     }
+    public void addTryCatchBlock(BytecodeWrapper start,BytecodeWrapper end,IRBasicBlock handler,String type)
+    {
+        assert start!=null;
+        this.tryCatchBound.add(new Pair(start,end));
+        this.tryCatchHandlerBlock.add(handler);
+        this.tryCatchBlockType.add(type);
+    }
+    public ArrayList<Node> getTryCatchHandlerBlocks()
+    {
+        return this.tryCatchHandlerBlock;
+    }
     public IRBasicBlock getEntryBlock()
     {
         return this.getBasicBlocks().get(0);
     }
-    public void emulateStack()
+    public void emulateStack(Stack<DataType> context,IRBasicBlock startBlock)
     {
-        IRBasicBlock block=this.getEntryBlock();
+        IRBasicBlock block=startBlock;
         HashSet<IRBasicBlock> visited=new HashSet<>();
         visited.add(block);
-        Stack<DataType> context=new Stack<>();
         LinkedList<Pair<IRBasicBlock,Stack<DataType>>> queue=new LinkedList<>();
         queue.add(new Pair<>(block, context));
         while(!queue.isEmpty())
@@ -77,13 +89,13 @@ public class IRMethod extends Graph
             this.unreachableBlock=new ArrayList<>();
             for(Node n:this.getNodes())
             {
-                if(n.getPredecessors().size()==0 && this.getNodes().indexOf(n)!=0)
+                if(n.getPredecessors().size()==0 && this.getNodes().indexOf(n)!=0 && !this.tryCatchHandlerBlock.contains(n))
                     this.unreachableBlock.add(n);
             }
         }
         return this.unreachableBlock;
     }
-    public void analysisStack()
+    public void analysisStack(int base,IRBasicBlock block)
     {
         HashMap<Node,Integer> weight=new HashMap<>();
         for(Node n:this.getNodes())
@@ -91,15 +103,15 @@ public class IRMethod extends Graph
             IRBasicBlock bb=(IRBasicBlock) n;
             weight.put(n,bb.getStackOffset());
         }
-        LoopChecker f=new LoopChecker(this,weight,this.getEntryBlock());
-        f.run();
+        LoopChecker f=new LoopChecker(this,weight,block);
+        f.run(base);
         HashMap<Node,ArrayList<Integer>> valueMap=f.getResult();
         for(Node n:valueMap.keySet())
         {
             ArrayList<Integer> values=valueMap.get(n);
-            if(this.unreachableBlock.contains(n))
+            if(this.unreachableBlock.contains(n) || values.size()==0)
                 continue;
-            assert values.size()==1;
+            assert values.size()<=1;
             IRBasicBlock bb=(IRBasicBlock) n;
             bb.setStackAddress(values.get(0));
         }

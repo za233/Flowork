@@ -18,34 +18,49 @@ public class TestClass
         {
             System.out.println(op[i][i].getTypeName());
         }
-        xas=10;
         Double x=0.123;
-        x+=y;
-        x=x*y-y*x*y;
-        long xz=9;
-        long yz=xz=2;
-        xz=~1;
-        System.out.println("yes");
-
-        switch(s)
+        try
         {
-            case 1:
-                return y;
-            case 2:
-                return op[0];
-            default:
-                return xxa(x,y);
+            xas=10;
+
+            x+=y;
+            x=x*y-y*x*y;
+            long xz=9;
+            long yz=xz=2;
+            xz=~1;
+            System.out.println("yes");
         }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            switch(s)
+            {
+                case 1:
+                    return y;
+                case 2:
+                    return op[0];
+                default:
+                    return xxa(x,y);
+            }
+        }
+
+
     }
     public static double xxa(double a,double b)
     {
         return a+b;
     }
 
-    public double getValue()
+    public int getValue()
     {
         value+=1;
-        return value;
+        if(value>10)
+            return 1;
+        else
+            return 2;
     }
     public void x()
     {

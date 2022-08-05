@@ -72,7 +72,7 @@ public class Main
         System.out.println(obj.getIDom(n11).getData());
         System.out.println(obj.getIDom(n12).getData());*/
 
-        ClassReader reader=new ClassReader("io.github.r1mao.ir.CodeBlock");
+        ClassReader reader=new ClassReader("io.github.r1mao.TestClass");
         ClassWriter writer=new ClassWriter(reader,ClassWriter.COMPUTE_MAXS);
         ClassWalker visitor=new ClassWalker(Opcodes.ASM8,writer);
         reader.accept(visitor,ClassReader.EXPAND_FRAMES);

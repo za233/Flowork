@@ -25,14 +25,14 @@ public class LoopChecker
     {
         return this.valueMap;
     }
-    public boolean run()
+    public boolean run(int base)
     {
         ArrayList<Node> list=graph.getNodes();
         for(int i=0;i<graph.getNodeNum();i++)
             this.valueMap.put(list.get(i),new ArrayList<Integer>());
         LinkedList<Pair<Node,Integer>> queue=new LinkedList<Pair<Node, Integer>>();
-        queue.add(new Pair<>(startPoint, 0));
-        this.valueMap.get(startPoint).add(0);
+        queue.add(new Pair<>(startPoint, base));
+        this.valueMap.get(startPoint).add(base);
         int times=0;
         while(!queue.isEmpty())
         {

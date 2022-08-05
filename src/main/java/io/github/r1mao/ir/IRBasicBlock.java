@@ -9,8 +9,8 @@ import java.util.HashMap;
 public class IRBasicBlock extends Node<CodeBlock>
 {
     private HashMap<Integer, Pair<String,String>> localVariable=new HashMap<>();
-    private int stackOffset=0;
-    private int stackAddress=0;
+    private int stackOffset=0xdeadbeef;
+    private int stackAddress=0xdeadbeef;
     public IRBasicBlock(CodeBlock data, IRMethod parent)
     {
         super(data, parent);
@@ -18,7 +18,10 @@ public class IRBasicBlock extends Node<CodeBlock>
     }
     public String getName()
     {
-        return "block_"+this.getParent().getNodes().indexOf(this);
+        String name="block";
+        if(this.isTryCatchHandler())
+            name="handler";
+        return name+"_"+this.getParent().getNodes().indexOf(this);
     }
     public CodeBlock getCode()
     {
@@ -26,7 +29,10 @@ public class IRBasicBlock extends Node<CodeBlock>
     }
     public void setStackOffset(int offset)
     {
-        this.stackOffset=offset;
+        if(this.stackOffset==0xdeadbeef)
+            this.stackOffset=offset;
+        else if(this.stackOffset!=offset)
+            assert false;
     }
     public int getStackOffset()
     {
@@ -34,8 +40,16 @@ public class IRBasicBlock extends Node<CodeBlock>
     }
     public void setStackAddress(int offset)
     {
-        this.stackAddress=offset;
+        if(this.stackAddress==0xdeadbeef)
+            this.stackAddress=offset;
+        else if(this.stackAddress!=offset)
+            assert false;
     }
+    public boolean isTryCatchHandler()
+    {
+        return ((IRMethod)this.getParent()).getTryCatchHandlerBlocks().contains(this);
+    }
+
     public int getStackAddress()
     {
         return this.stackAddress;

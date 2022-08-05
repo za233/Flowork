@@ -1,0 +1,186 @@
+working method: <init> ()V
+block_0:
+s0_4 = this;
+((java.lang.Object)s0_4).<init>();
+s0_4 = this;
+s4_8 = 1.0;
+((io.github.r1mao.TestClass)s0_4).value = s4_8;
+return;
+
+
+
+working method: test (ID)Ljava/lang/Object;
+block_0:
+s0_4 = 3;
+s4_4 = 2;
+s0_4 = new array<[[Lio/github/r1mao/DataType;> [s0_4][s4_4];
+op = s0_4;
+s0_4 = op;
+s4_4 = 0;
+s0_4 = s0_4[s4_4];
+s4_4 = 0;
+s8_4 = (io.github.r1mao.DataType).TYPE_REFERENCE;
+s0_4[s4_4] = s8_4;
+s0_4 = op;
+s4_4 = 1;
+s0_4 = s0_4[s4_4];
+s4_4 = 1;
+s8_4 = (io.github.r1mao.DataType).TYPE_INTEGER;
+s0_4[s4_4] = s8_4;
+s0_4 = op;
+s4_4 = 2;
+s0_4 = s0_4[s4_4];
+s4_4 = 1;
+s8_4 = (io.github.r1mao.DataType).TYPE_DOUBLE;
+s0_4[s4_4] = s8_4;
+s0_4 = 0;
+i = s0_4;
+
+block_1:
+s0_4 = i;
+s4_4 = op;
+s4_4 = s4_4.length;
+if(s0_4 >= s4_4) goto block_3; else goto block_2;
+
+block_2:
+s0_4 = (java.lang.System).out;
+s4_4 = op;
+s8_4 = i;
+s4_4 = s4_4[s8_4];
+s8_4 = i;
+s4_4 = s4_4[s8_4];
+s4_4 = ((io.github.r1mao.DataType)s4_4).getTypeName();
+((java.io.PrintStream)s0_4).println(s4_4);
+i = i + 1;
+goto block_1;
+
+block_3:
+s0_4 = 10;
+(io.github.r1mao.TestClass).xas = s0_4;
+s0_8 = 0.123;
+s0_4 = (java.lang.Double).valueOf(s0_8);
+x = s0_4;
+s0_4 = x;
+s0_8 = ((java.lang.Double)s0_4).doubleValue();
+s8_8 = y;
+s0_8 = s0_8 + s8_8;
+s0_4 = (java.lang.Double).valueOf(s0_8);
+x = s0_4;
+s0_4 = x;
+s0_8 = ((java.lang.Double)s0_4).doubleValue();
+s8_8 = y;
+s0_8 = s0_8 * s8_8;
+s8_8 = y;
+s16_4 = x;
+s16_8 = ((java.lang.Double)s16_4).doubleValue();
+s8_8 = s8_8 * s16_8;
+s16_8 = y;
+s8_8 = s8_8 * s16_8;
+s0_8 = s0_8 - s8_8;
+s0_4 = (java.lang.Double).valueOf(s0_8);
+x = s0_4;
+s0_8 = 9;
+xz = s0_8;
+s0_8 = 2;
+s8_8 = s0_8;
+xz = s8_8;
+yz = s0_8;
+s0_8 = -2;
+xz = s0_8;
+s0_4 = (java.lang.System).out;
+s4_4 = yes;
+((java.io.PrintStream)s0_4).println(s4_4);
+s0_4 = s;
+switch(s0_4) {
+	case 1:  goto block_4;
+	case 2:  goto block_5;
+	default:  goto block_6;
+}
+
+block_4:
+s0_8 = y;
+s0_4 = (java.lang.Double).valueOf(s0_8);
+return s0_4;
+
+block_5:
+s0_4 = op;
+s4_4 = 0;
+s0_4 = s0_4[s4_4];
+return s0_4;
+
+block_6:
+s0_4 = x;
+s0_8 = ((java.lang.Double)s0_4).doubleValue();
+s8_8 = y;
+s0_8 = (io.github.r1mao.TestClass).xxa(s0_8, s8_8);
+s0_4 = (java.lang.Double).valueOf(s0_8);
+return s0_4;
+working method: xxa (DD)D
+
+block_0:
+s0_8 = a;
+s8_8 = b;
+s0_8 = s0_8 + s8_8;
+return s0_8;
+working method: getValue ()D
+
+block_0:
+s0_4 = this;
+s4_4 = s0_4;
+s4_8 = ((io.github.r1mao.TestClass)s4_4).value;
+s12_8 = 1.0;
+s4_8 = s4_8 + s12_8;
+((io.github.r1mao.TestClass)s0_4).value = s4_8;
+s0_4 = this;
+s0_8 = ((io.github.r1mao.TestClass)s0_4).value;
+return s0_8;
+
+
+working method: x ()V
+block_0:
+s0_4 = 1;
+a = s0_4;
+s0_4 = a;
+s4_4 = -1;
+s0_4 = s0_4 ^ s4_4;
+a = s0_4;
+s0_4 = null;
+xl = s0_4;
+s0_4 = xl;
+if(s0_4 != null) goto block_2; else goto block_1;
+
+block_1:
+s0_4 = (java.lang.System).out;
+s4_4 = yes;
+((java.io.PrintStream)s0_4).println(s4_4);
+
+block_2:
+s0_4 = this;
+s0_8 = ((io.github.r1mao.TestClass)s0_4).getValue();
+s0_4 = new java.lang.Double();
+s4_4 = s0_4;
+s8_8 = 0.1;
+((java.lang.Double)s4_4).<init>(s8_8);
+x = s0_4;
+s0_4 = (java.lang.System).out;
+s4_4 = a;
+((java.io.PrintStream)s0_4).println(s4_4);
+s0_4 = (java.lang.System).out;
+s4_4 = x;
+s4_4 = s4_4 instanceof java.lang.Double;
+((java.io.PrintStream)s0_4).println(s4_4);
+s0_4 = a;
+s4_4 = 1;
+s0_4 = s0_4 + s4_4;
+b = s0_4;
+s0_4 = (java.lang.System).out;
+s4_4 = b;
+((java.io.PrintStream)s0_4).println(s4_4);
+return;
+
+
+working method: <clinit> ()V
+block_0:
+s0_4 = 0;
+(io.github.r1mao.TestClass).xas = s0_4;
+return;

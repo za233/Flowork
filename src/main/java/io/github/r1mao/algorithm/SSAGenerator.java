@@ -91,12 +91,13 @@ public class SSAGenerator
     }
     private void translate(IRBasicBlock bb)
     {
-
+        this.visited.add(bb);
         HashMap<Value,StaticValue> mapping= (HashMap<Value, StaticValue>) this.context.lastElement().clone();
         for(IRStatement stmt:bb.getCode().getIRCode())
         {
             if(stmt instanceof StmtAssignment)
             {
+
                 StmtAssignment assignment= (StmtAssignment) stmt;
                 Value def=assignment.getDefValue();
                 for(Value v:stmt.getReadVariable())
@@ -146,6 +147,7 @@ public class SSAGenerator
                 }
             }
         }
+        this.method.dump();
         for(Node n:bb.getSuccessors())
         {
             IRBasicBlock scc= (IRBasicBlock) n;
@@ -166,7 +168,6 @@ public class SSAGenerator
             IRBasicBlock scc= (IRBasicBlock) n;
             if(this.visited.contains(scc))
                 continue;
-            this.visited.add(scc);
             this.context.push(mapping);
             translate(scc);
             this.context.pop();
@@ -198,12 +199,71 @@ public class SSAGenerator
                 phi.setHolder(bb.getCode());
             }
         }
+
+        //this.method.dump();
         this.context.push(new HashMap<>());
         for(IRBasicBlock bb:entryBlocks)
             translate(bb);
+        /*for(StaticValue v:StaticValue.getAllValues())
+        {
+            Value x=v.getTarget();
+            System.out.println("-----------------");
+            System.out.println(v.dump());
+            System.out.println(x);
+            System.out.println(x.dump());
+        }*/
+        deleteRubbishCode();
 
 
+    }
+    public void deleteRubbishCode()
+    {
+        boolean result;
+        do
+        {
+            result=false;
+            for(IRBasicBlock bb:this.method.getBasicBlocks())
+            {
+                ArrayList<IRStatement> rubbishCode=new ArrayList<>();
+                for(IRStatement stmt:bb.getCode().getIRCode())
+                {
+                    if(stmt instanceof StmtAssignment)
+                    {
+                        StmtAssignment assign= (StmtAssignment) stmt;
+                        Value def=assign.getDefValue();
+                        if(def!=null && def.getValueType()==Value.STATIC_VALUE)
+                        {
+                            StaticValue staticValue= (StaticValue) def;
+                            if(staticValue.getUsers().size()==0)
+                            {
+                                rubbishCode.add(assign);
+                                result=true;
+                                StaticValue.releaseValue(staticValue);
+                            }
+                        }
+                    }
+                    else if(stmt instanceof StmtPhiNode)
+                    {
+                        StmtPhiNode phiNode= (StmtPhiNode) stmt;
+                        Value def=phiNode.getValue();
+                        if(def.getValueType()==Value.STATIC_VALUE)
+                        {
+                            StaticValue staticValue= (StaticValue) def;
+                            if(staticValue.getUsers().size()==0)
+                            {
+                                rubbishCode.add(phiNode);
+                                result=true;
+                                StaticValue.releaseValue(staticValue);
+                            }
 
+                        }
+                    }
+                }
+                for(IRStatement stmt:rubbishCode)
+                    bb.getCode().getIRCode().remove(stmt);
+
+            }
+        }while(result);
 
     }
 

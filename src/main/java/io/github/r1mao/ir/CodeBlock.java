@@ -50,6 +50,7 @@ public class CodeBlock
     }
     public BytecodeWrapper getBytecodeByIndex(int index)
     {
+
         return this.originalCode.get(index);
     }
     public BytecodeWrapper getFirstBytecode()

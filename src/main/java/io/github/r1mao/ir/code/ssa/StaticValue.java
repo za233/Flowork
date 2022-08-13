@@ -51,4 +51,8 @@ public class StaticValue extends Value
     {
         return "%"+allStaticValue.indexOf(this);
     }
+    public static void releaseValue(StaticValue value)
+    {
+        allStaticValue.remove(value);
+    }
 }

@@ -7,12 +7,16 @@ import io.github.r1mao.algorithm.Node;
 import io.github.r1mao.ir.code.Value;
 import javafx.util.Pair;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class IRMethod extends Graph
 {
     private int access;
     private String name,desc,signature;
+    private IRClass parent;
     private String[] exceptions;
     private ArrayList<IRBasicBlock> unreachableBlock;
     private ArrayList<IRBasicBlock> tryCatchHandlerBlock=new ArrayList<>();
@@ -27,7 +31,14 @@ public class IRMethod extends Graph
         this.signature=signature;
         this.exceptions=exceptions;
     }
-
+    public void setParent(IRClass parent)
+    {
+        this.parent=parent;
+    }
+    public String getName()
+    {
+        return this.parent.getName().replaceAll("/","_")+"$"+this.name;
+    }
     public ArrayList<IRBasicBlock> getBasicBlocks()
     {
         ArrayList<IRBasicBlock> arr=new ArrayList<>();
@@ -157,7 +168,14 @@ public class IRMethod extends Graph
         }
         this.reachDefineAnalyse();
     }
-    public String buildGvFile()
+    public void dump()
+    {
+        for(IRBasicBlock bb:this.getBasicBlocks())
+        {
+            System.out.println(bb.getName()+":\n"+bb.getCode().displayIRCode()+"\n");
+        }
+    }
+    public void buildGvFile(String filename)
     {
         String content="digraph "+this.name+" {\n\tlabeljust=l\n";
         int i=0;
@@ -173,7 +191,21 @@ public class IRMethod extends Graph
                 content+="\t"+this.getNodes().indexOf(n)+" -> "+this.getNodes().indexOf(s)+"\n";
         }
         content+="}";
-        return content;
+        FileWriter fileWriter= null;
+        try
+        {
+            File file =new File(filename);
+            if(!file.exists())
+                file.createNewFile();
+            fileWriter=new FileWriter(filename);
+            fileWriter.write(content);
+            fileWriter.close();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return;
     }
     private void reachDefineAnalyse()
     {

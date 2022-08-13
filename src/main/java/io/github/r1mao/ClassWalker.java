@@ -3,14 +3,12 @@ package io.github.r1mao;
 import io.github.r1mao.algorithm.LengauerTarjan;
 import io.github.r1mao.algorithm.Node;
 import io.github.r1mao.algorithm.SSAGenerator;
-import io.github.r1mao.ir.BytecodeWrapper;
-import io.github.r1mao.ir.CodeBlock;
-import io.github.r1mao.ir.IRBasicBlock;
-import io.github.r1mao.ir.IRMethod;
+import io.github.r1mao.ir.*;
 import io.github.r1mao.ir.code.Value;
 import javafx.util.Pair;
 import org.objectweb.asm.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +16,7 @@ import java.util.Stack;
 
 public class ClassWalker extends ClassVisitor
 {
+    private IRClass irClass;
     protected ClassWalker(int api,ClassVisitor v)
     {
         super(api,v);
@@ -46,15 +45,17 @@ public class ClassWalker extends ClassVisitor
         private ArrayList<Pair<Label,Label>> tryCatchBlockBound=new ArrayList<>();
         private ArrayList<Label> tryCatchHandler=new ArrayList<>();
         private ArrayList<String> exceptionType=new ArrayList<>();
+        private IRClass irClass;
         protected MethodWalker(int api, MethodVisitor methodVisitor)
         {
             super(api,methodVisitor);
+
         }
         public void visitParameter(final String name, final int access)
         {
             super.visitParameter(name,access);
         }
-        public void init(int access, String name, String desc, String signature, String[] exceptions)
+        public void init(int access, String name, String desc, String signature, String[] exceptions,IRClass irClass)
         {
             System.out.println("working method: "+name+" "+desc);
             /*DescriptorParser parser=new DescriptorParser(desc,true);
@@ -71,6 +72,9 @@ public class ClassWalker extends ClassVisitor
             }
 */
             this.method=new IRMethod(access,name,desc,signature,exceptions);
+            this.irClass=irClass;
+            this.irClass.addMethod(this.method);
+            this.method.setParent(this.irClass);
         }
         public IRMethod getMethod()
         {
@@ -223,9 +227,13 @@ public class ClassWalker extends ClassVisitor
             ArrayList<CodeBlock> codes=new ArrayList<>();
 
             // 此处开始根据字节码序列和分割点构造CodeBlock
+            /*for(BytecodeWrapper w:this.splitPoint)
+            {
+                System.out.println("split at pos "+this.wrappers.indexOf(w));
+            }*/
             for(BytecodeWrapper w:this.wrappers)
             {
-                if(this.splitPoint.contains(w))
+                if(this.wrappers.indexOf(w)!=0 && this.splitPoint.contains(w))
                 {
                     codes.add(code);
                     code=new CodeBlock();
@@ -240,6 +248,9 @@ public class ClassWalker extends ClassVisitor
             for(CodeBlock c:codes)
             {
                 IRBasicBlock bb=new IRBasicBlock(c,this.method);
+                /*System.out.println(c);
+                for(BytecodeWrapper wrapper:c.getOriginalCode())
+                    System.out.println(wrapper.getOpcode());*/
                 entryMapping.put(c.getFirstBytecode(),bb);
                 this.method.addNode(bb);
                 if(code!=null)
@@ -431,11 +442,11 @@ public class ClassWalker extends ClassVisitor
                 System.out.println(bb.getName()+":\n"+bb.getCode().displayIRCode()+"\n");
             }
             new SSAGenerator(this.method).run();
-
             for(IRBasicBlock bb:this.method.getBasicBlocks())
             {
                 System.out.println(bb.getName()+":\n"+bb.getCode().displayIRCode()+"\n");
             }
+
         }
         public void visitEnd()
         {
@@ -446,7 +457,15 @@ public class ClassWalker extends ClassVisitor
             this.generateIRCode();
 
             //System.out.println("calculate stack offset finished");
-            //System.out.println(this.method.buildGvFile());
+            String filename=this.method.getName().replaceAll("<","").replaceAll(">","")+".gv";
+            this.method.buildGvFile(filename);
+            try
+            {
+                Runtime.getRuntime().exec("dot -Tpdf "+filename+" -o "+filename+".pdf");
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
             /*for(Node n:this.method.getNodes())
             {
                 IRBasicBlock bb=(IRBasicBlock) n;
@@ -462,6 +481,7 @@ public class ClassWalker extends ClassVisitor
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces)
     {
         super.visit(version,access,name,signature, superName,interfaces);
+        this.irClass=new IRClass(access,name,signature,superName,interfaces);
     }
     @Override
     public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value)
@@ -474,7 +494,7 @@ public class ClassWalker extends ClassVisitor
         Value.resetCache();
         MethodVisitor mv=super.visitMethod(access,name, desc,signature,exceptions);
         MethodWalker mw=new MethodWalker(this.api,mv);
-        mw.init(access,name, desc,signature,exceptions);
+        mw.init(access,name, desc,signature,exceptions,this.irClass);
         return mw;
     }
     public void visitEnd()

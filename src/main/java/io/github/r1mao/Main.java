@@ -63,17 +63,10 @@ public class Main
         for(Node n:graph.getNodes())
             System.out.println(obj.getDominateFrontier(n));*/
 
-        ClassReader reader=new ClassReader("io.github.r1mao.algorithm.LoopChecker");
+        ClassReader reader=new ClassReader("io.github.r1mao.algorithm.SSAGenerator");
         ClassWriter writer=new ClassWriter(reader,ClassWriter.COMPUTE_MAXS);
         ClassWalker visitor=new ClassWalker(Opcodes.ASM8,writer);
         reader.accept(visitor,ClassReader.EXPAND_FRAMES);
 
-        HashSet<Integer> set=new HashSet<>(),gg;
-        set.add(1);
-        set.add(2);
-        gg= (HashSet<Integer>) set.clone();
-        gg.add(3);
-        System.out.println(set);
-        System.out.println(gg);
     }
 }

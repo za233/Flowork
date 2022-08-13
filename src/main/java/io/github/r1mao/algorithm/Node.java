@@ -38,7 +38,7 @@ public class Node<T>
         }
 
     }
-    protected T getData()
+    public T getData()
     {
         return this.data;
     }

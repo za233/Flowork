@@ -4,6 +4,7 @@ import io.github.r1mao.DataType;
 import io.github.r1mao.algorithm.LoopChecker;
 import io.github.r1mao.algorithm.Graph;
 import io.github.r1mao.algorithm.Node;
+import io.github.r1mao.ir.code.Value;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -13,10 +14,11 @@ public class IRMethod extends Graph
     private int access;
     private String name,desc,signature;
     private String[] exceptions;
-    private ArrayList<Node> unreachableBlock;
-    private ArrayList<Node> tryCatchHandlerBlock=new ArrayList<>();
+    private ArrayList<IRBasicBlock> unreachableBlock;
+    private ArrayList<IRBasicBlock> tryCatchHandlerBlock=new ArrayList<>();
     private ArrayList<Pair<BytecodeWrapper,BytecodeWrapper>> tryCatchBound=new ArrayList<>();
     private ArrayList<String> tryCatchBlockType=new ArrayList<>();
+    private HashMap<Value,HashSet<IRStatement>> defineMap;
     public IRMethod(int access, String name, String desc, String signature, String[] exceptions)
     {
         this.access=access;
@@ -40,7 +42,7 @@ public class IRMethod extends Graph
         this.tryCatchHandlerBlock.add(handler);
         this.tryCatchBlockType.add(type);
     }
-    public ArrayList<Node> getTryCatchHandlerBlocks()
+    public ArrayList<IRBasicBlock> getTryCatchHandlerBlocks()
     {
         return this.tryCatchHandlerBlock;
     }
@@ -82,7 +84,7 @@ public class IRMethod extends Graph
         }
 
     }
-    public ArrayList<Node> getUnreachableBlocks()
+    public ArrayList<IRBasicBlock> getUnreachableBlocks()
     {
         if(this.unreachableBlock==null)
         {
@@ -90,10 +92,14 @@ public class IRMethod extends Graph
             for(Node n:this.getNodes())
             {
                 if(n.getPredecessors().size()==0 && this.getNodes().indexOf(n)!=0 && !this.tryCatchHandlerBlock.contains(n))
-                    this.unreachableBlock.add(n);
+                    this.unreachableBlock.add((IRBasicBlock) n);
             }
         }
         return this.unreachableBlock;
+    }
+    public HashMap<Value,HashSet<IRStatement>> getDefineMap()
+    {
+        return defineMap;
     }
     public void analysisStack(int base,IRBasicBlock block)
     {
@@ -118,14 +124,102 @@ public class IRMethod extends Graph
     }
     public void generateIRCode()
     {
+        assert this.unreachableBlock.size()==0;
         for(Node n:this.getNodes())
         {
             IRBasicBlock bb=(IRBasicBlock) n;
-            if(!this.unreachableBlock.contains(bb))
-                bb.getCode().makeIRCode();
-            System.out.println("\n"+bb.getName()+":");
-            bb.getCode().displayIRCode();
-        }
-    }
+            bb.getCode().makeIRCode();
 
+        }
+
+    }
+    public void analyseIRCode()
+    {
+        this.defineMap=new HashMap<>();
+        for(Node n:this.getNodes())
+        {
+            IRBasicBlock bb=(IRBasicBlock) n;
+            for(IRStatement stmt:bb.getCode().getIRCode())
+            {
+                for(Value v:stmt.getWriteVariable())
+                {
+                    if(this.defineMap.get(v)==null)
+                        this.defineMap.put(v,new HashSet<>());
+                    HashSet<IRStatement> set=this.defineMap.get(v);
+                    set.add(stmt);
+                }
+            }
+        }
+        for(Node n:this.getNodes())
+        {
+            IRBasicBlock bb=(IRBasicBlock) n;
+            bb.getCode().analyseIRCodeDataflow();
+        }
+        this.reachDefineAnalyse();
+    }
+    public String buildGvFile()
+    {
+        String content="digraph "+this.name+" {\n\tlabeljust=l\n";
+        int i=0;
+        for(IRBasicBlock bb:this.getBasicBlocks())
+        {
+            content+="\t"+i+" [label=\""+bb.getName()+":\n"+bb.getCode().displayIRCode()+"\"]";
+            i++;
+        }
+
+        for(Node n:this.getNodes())
+        {
+            for(Object s:n.getSuccessors())
+                content+="\t"+this.getNodes().indexOf(n)+" -> "+this.getNodes().indexOf(s)+"\n";
+        }
+        content+="}";
+        return content;
+    }
+    private void reachDefineAnalyse()
+    {
+        for(Node n:this.getNodes())
+        {
+            IRBasicBlock bb=(IRBasicBlock) n;
+            bb.getInSet().clear();
+            bb.getOutSet().clear();
+        }
+        boolean flag=true;
+        while(flag)
+        {
+            flag=false;
+            for(Node n:this.getNodes())
+            {
+
+                IRBasicBlock bb=(IRBasicBlock) n;
+                int size=bb.getInSet().size();
+                for(Node p:bb.getPredecessors())
+                {
+                    IRBasicBlock bb1= (IRBasicBlock) p;
+                    bb.getInSet().addAll(bb1.getOutSet());
+                }
+                if(bb.getInSet().size()>size)
+                    flag=true;
+                bb.getOutSet().clear();
+                bb.getOutSet().addAll(bb.getCode().getGenSet());
+                HashSet<IRStatement> tmp= (HashSet<IRStatement>) bb.getInSet().clone();
+                tmp.removeAll(bb.getCode().getKillSet());
+                bb.getOutSet().addAll(tmp);
+
+            }
+        }
+        /*for(Node n:this.getNodes())
+        {
+            IRBasicBlock bb = (IRBasicBlock) n;
+
+            System.out.println("----------------------------------------\nin set for "+bb.getName());
+            for(IRStatement statement:bb.getInSet())
+                System.out.println("at "+statement.getHolder().getHolder().getName()+" -> "+statement.dump());
+            System.out.println("\n");
+
+            System.out.println("\nout set for "+bb.getName());
+            for(IRStatement statement:bb.getOutSet())
+                System.out.println("at "+statement.getHolder().getHolder().getName()+" -> "+statement.dump());
+            System.out.println("\n");
+        }*/
+    }
 }

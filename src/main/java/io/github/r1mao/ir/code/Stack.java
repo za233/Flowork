@@ -20,11 +20,17 @@ public class Stack extends Value
             if(t.stackIndex==stackIndex && t.size==size)
                 return t;
         }
-        return new Stack(stackIndex,size);
+        Stack r=new Stack(stackIndex,size);
+        cache.add(r);
+        return r;
     }
     @Override
     public String dump()
     {
         return "s"+stackIndex+"_"+size;
+    }
+    public static ArrayList<Stack> getAllocatedStackRegion()
+    {
+        return cache;
     }
 }

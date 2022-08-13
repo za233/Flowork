@@ -1,5 +1,6 @@
 package io.github.r1mao.ir.code;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Operator extends Value
@@ -19,11 +20,16 @@ public class Operator extends Value
     public static int ARRAY_LEN=81;
     public static int CHECKCAST=82,INSTANCEOF=83;
     public static int MULTI_NEWARRAY=84;
+    private boolean isSubExpression=false;
     private Operator(int operateType,Value ...values)
     {
         super(Value.OPERATOR);
         this.operateType=operateType;
         this.operands=values;
+    }
+    public Value[] getOperands()
+    {
+        return this.operands;
     }
     public void addMetadata(String key,String value)
     {
@@ -185,114 +191,115 @@ public class Operator extends Value
     @Override
     public String dump()
     {
+        String dumpString=null;
         if(this.isArrayGet())
         {
-            return operands[0].dump()+"["+operands[1].dump()+"]";
+            dumpString=operands[0].dump()+"["+operands[1].dump()+"]";
         }
         else if(this.isAdd())
         {
-            return operands[0].dump()+" + "+operands[1].dump();
+            dumpString=operands[0].dump()+" + "+operands[1].dump();
         }
         else if(this.isSub())
         {
-            return operands[0].dump()+" - "+operands[1].dump();
+            dumpString=operands[0].dump()+" - "+operands[1].dump();
         }
         else if(this.isMul())
         {
-            return operands[0].dump()+" * "+operands[1].dump();
+            dumpString=operands[0].dump()+" * "+operands[1].dump();
         }
         else if(this.isDiv())
         {
-            return operands[0].dump()+" / "+operands[1].dump();
+            dumpString=operands[0].dump()+" / "+operands[1].dump();
         }
         else if(this.isRem())
         {
-            return operands[0].dump()+" % "+operands[1].dump();
+            dumpString=operands[0].dump()+" % "+operands[1].dump();
         }
         else if(this.isNeg())
         {
-            return "-"+operands[0].dump();
+            dumpString="-"+operands[0].dump();
         }
         else if(this.isAnd())
         {
-            return operands[0].dump()+" & "+operands[1].dump();
+            dumpString=operands[0].dump()+" & "+operands[1].dump();
         }
         else if(this.isOr())
         {
-            return operands[0].dump()+" | "+operands[1].dump();
+            dumpString=operands[0].dump()+" | "+operands[1].dump();
         }
         else if(this.isXor())
         {
-            return operands[0].dump()+" ^ "+operands[1].dump();
+            dumpString=operands[0].dump()+" ^ "+operands[1].dump();
         }
         else if(this.isShl())
         {
-            return operands[0].dump()+" >> "+operands[1].dump();
+            dumpString=operands[0].dump()+" >> "+operands[1].dump();
         }
         else if(this.isShr())
         {
-            return operands[0].dump()+" << "+operands[1].dump();
+            dumpString=operands[0].dump()+" << "+operands[1].dump();
         }
         else if(this.isUShr())
         {
-            return operands[0].dump()+" >>> "+operands[1].dump();
+            dumpString=operands[0].dump()+" >>> "+operands[1].dump();
         }
         else if(this.isCastToByte())
         {
-            return "(byte) "+operands[0].dump();
+            dumpString="(byte) "+operands[0].dump();
         }
         else if(this.isCastToChar())
         {
-            return "(char) "+operands[0].dump();
+            dumpString="(char) "+operands[0].dump();
         }
         else if(this.isCastToShort())
         {
-            return "(short) "+operands[0].dump();
+            dumpString="(short) "+operands[0].dump();
         }
         else if(this.isCastToInt())
         {
-            return "(int) "+operands[0].dump();
+            dumpString="(int) "+operands[0].dump();
         }
         else if(this.isCastToFloat())
         {
-            return "(float) "+operands[0].dump();
+            dumpString="(float) "+operands[0].dump();
         }
         else if(this.isCastToLong())
         {
-            return "(long) "+operands[0].dump();
+            dumpString="(long) "+operands[0].dump();
         }
         else if(this.isCastToDouble())
         {
-            return "(double) "+operands[0].dump();
+            dumpString="(double) "+operands[0].dump();
         }
         else if(this.isCmp1())
         {
-            return "cmp("+operands[0].dump()+", "+operands[1].dump()+")";
+            dumpString="cmp("+operands[0].dump()+", "+operands[1].dump()+")";
         }
         else if(this.isCmp2())
         {
             if(this.operateType==IEQ || this.operateType==AEQ)
-                return operands[0].dump()+" == "+operands[1].dump();
+                dumpString=operands[0].dump()+" == "+operands[1].dump();
             else if(this.operateType==INE || this.operateType==ANE)
-                return operands[0].dump()+" != "+operands[1].dump();
+                dumpString=operands[0].dump()+" != "+operands[1].dump();
             else if(this.operateType==ILT)
-                return operands[0].dump()+" < "+operands[1].dump();
+                dumpString=operands[0].dump()+" < "+operands[1].dump();
             else if(this.operateType==ILE)
-                return operands[0].dump()+" <= "+operands[1].dump();
+                dumpString=operands[0].dump()+" <= "+operands[1].dump();
             else if(this.operateType==IGT)
-                return operands[0].dump()+" > "+operands[1].dump();
+                dumpString=operands[0].dump()+" > "+operands[1].dump();
             else if(this.operateType==IGE)
-                return operands[0].dump()+" >= "+operands[1].dump();
+                dumpString=operands[0].dump()+" >= "+operands[1].dump();
             else
                 assert false;
         }
         else if(this.isGetStatic() || this.isPutStatic())
         {
-            return "("+this.getMetadata("owner").replaceAll("/",".")+")."+this.getMetadata("name");
+            dumpString="("+this.getMetadata("owner").replaceAll("/",".")+")."+this.getMetadata("name");
         }
         else if(this.isGetField() || this.isPutField())
         {
-            return "(("+this.getMetadata("owner").replaceAll("/",".")+")"+operands[0].dump()+")."+this.getMetadata("name");
+            dumpString="(("+this.getMetadata("owner").replaceAll("/",".")+")"+operands[0].dump()+")."+this.getMetadata("name");
         }
         else if(this.isInvokeStatic())
         {
@@ -304,7 +311,7 @@ public class Operator extends Value
                     result+=", ";
             }
             result+=")";
-            return result;
+            dumpString=result;
         }
         else if(this.isInvokeMethod())
         {
@@ -316,39 +323,41 @@ public class Operator extends Value
                     result+=", ";
             }
             result+=")";
-            return result;
+            dumpString=result;
         }
         else if(this.isNew())
         {
-            return "new "+this.getMetadata("type").replaceAll("/",".")+"()";
+            dumpString="new "+this.getMetadata("type").replaceAll("/",".")+"()";
         }
         else if(this.isNewArray())
         {
-            return "new "+this.getMetadata("rawType")+"["+operands[0].dump()+"]";
+            dumpString="new "+this.getMetadata("rawType")+"["+operands[0].dump()+"]";
         }
         else if(this.isANewArray())
         {
-            return "new "+this.getMetadata("type").replaceAll("/",".")+"["+operands[0].dump()+"]";
+            dumpString="new "+this.getMetadata("type").replaceAll("/",".")+"["+operands[0].dump()+"]";
         }
         else if(this.isArrayLen())
         {
-            return operands[0].dump()+".length";
+            dumpString=operands[0].dump()+".length";
         }
         else if(this.isCheckCast())
         {
-            return "("+this.getMetadata("type").replaceAll("/",".")+") "+operands[0].dump();
+            dumpString="("+this.getMetadata("type").replaceAll("/",".")+") "+operands[0].dump();
         }
         else if(this.isInstanceOf())
         {
-            return operands[0].dump()+" instanceof "+this.getMetadata("type").replaceAll("/",".");
+            dumpString=operands[0].dump()+" instanceof "+this.getMetadata("type").replaceAll("/",".");
         }
         else if(this.isMultiANewArray())
         {
             String result="new array<"+this.getMetadata("descriptor")+"> ";
             for(int i=0;i<this.operands.length;i++)
                 result+="["+this.operands[i].dump()+"]";
-            return result;
+            dumpString=result;
         }
-        return null;
+        if(isSubExpression)
+            dumpString="("+dumpString+")";
+        return dumpString;
     }
 }

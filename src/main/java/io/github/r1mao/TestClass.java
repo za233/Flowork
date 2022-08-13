@@ -11,16 +11,23 @@ public class TestClass
     public static Object test(int s,double y) throws Exception
     {
         DataType op[][]=new DataType[3][2];
-        op[0][0]=DataType.TYPE_REFERENCE;
-        op[1][1]=DataType.TYPE_INTEGER;
-        op[2][1]=DataType.TYPE_DOUBLE;
-        for(int i=0;i<op.length;i++)
-        {
-            System.out.println(op[i][i].getTypeName());
-        }
         Double x=0.123;
         try
         {
+
+            op[0][0]=DataType.TYPE_REFERENCE;
+            op[1][1]=DataType.TYPE_INTEGER;
+            op[2][1]=DataType.TYPE_DOUBLE;
+            for(int i=0;i<op.length;i++)
+            {
+                System.out.println(op[i][i].getTypeName());
+                if(i>10)
+                {
+                    i=7;
+                    System.out.println("Again");
+                }
+            }
+
             xas=10;
 
             x+=y;
@@ -61,6 +68,15 @@ public class TestClass
             return 1;
         else
             return 2;
+    }
+    public void loop()
+    {
+        int i=0;
+        do
+        {
+            i++;
+            System.out.println(i);
+        }while (true);
     }
     public void x()
     {

@@ -1,10 +1,13 @@
 package io.github.r1mao;
 
+import io.github.r1mao.algorithm.LengauerTarjan;
 import io.github.r1mao.algorithm.Node;
+import io.github.r1mao.algorithm.SSAGenerator;
 import io.github.r1mao.ir.BytecodeWrapper;
 import io.github.r1mao.ir.CodeBlock;
 import io.github.r1mao.ir.IRBasicBlock;
 import io.github.r1mao.ir.IRMethod;
+import io.github.r1mao.ir.code.Value;
 import javafx.util.Pair;
 import org.objectweb.asm.*;
 
@@ -422,6 +425,17 @@ public class ClassWalker extends ClassVisitor
         public void generateIRCode()
         {
             this.method.generateIRCode();
+            this.method.analyseIRCode();
+            for(IRBasicBlock bb:this.method.getBasicBlocks())
+            {
+                System.out.println(bb.getName()+":\n"+bb.getCode().displayIRCode()+"\n");
+            }
+            new SSAGenerator(this.method).run();
+
+            for(IRBasicBlock bb:this.method.getBasicBlocks())
+            {
+                System.out.println(bb.getName()+":\n"+bb.getCode().displayIRCode()+"\n");
+            }
         }
         public void visitEnd()
         {
@@ -430,15 +444,16 @@ public class ClassWalker extends ClassVisitor
             this.analysisLocalVariables();
             this.stackAnalysis();
             this.generateIRCode();
-            //System.out.println("calculate stack offset finished");
 
+            //System.out.println("calculate stack offset finished");
+            //System.out.println(this.method.buildGvFile());
             /*for(Node n:this.method.getNodes())
             {
                 IRBasicBlock bb=(IRBasicBlock) n;
-                System.out.println("Stack offset "+bb.getStackOffset()+"  Stack address:"+bb.getStackAddress());
+                System.out.println("\n"+bb.getName()+":");
+                System.out.println(" - Stack offset "+bb.getStackOffset()+"  Stack address:"+bb.getStackAddress());
+                bb.getCode().displayIRCode();
             }*/
-
-
             super.visitEnd();
             //this.method.addNode();
         }
@@ -446,7 +461,6 @@ public class ClassWalker extends ClassVisitor
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces)
     {
-
         super.visit(version,access,name,signature, superName,interfaces);
     }
     @Override
@@ -457,6 +471,7 @@ public class ClassWalker extends ClassVisitor
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
     {
+        Value.resetCache();
         MethodVisitor mv=super.visitMethod(access,name, desc,signature,exceptions);
         MethodWalker mw=new MethodWalker(this.api,mv);
         mw.init(access,name, desc,signature,exceptions);

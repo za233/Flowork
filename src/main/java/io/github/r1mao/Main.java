@@ -11,6 +11,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Main
 {
@@ -59,22 +60,20 @@ public class Main
 
         LengauerTarjan obj=new LengauerTarjan(graph,n0);
         obj.run();
-        System.out.println(obj.getIDom(n1).getData());
-        System.out.println(obj.getIDom(n2).getData());
-        System.out.println(obj.getIDom(n3).getData());
-        System.out.println(obj.getIDom(n4).getData());
-        System.out.println(obj.getIDom(n5).getData());
-        System.out.println(obj.getIDom(n6).getData());
-        System.out.println(obj.getIDom(n7).getData());
-        System.out.println(obj.getIDom(n8).getData());
-        System.out.println(obj.getIDom(n9).getData());
-        System.out.println(obj.getIDom(n10).getData());
-        System.out.println(obj.getIDom(n11).getData());
-        System.out.println(obj.getIDom(n12).getData());*/
+        for(Node n:graph.getNodes())
+            System.out.println(obj.getDominateFrontier(n));*/
 
-        ClassReader reader=new ClassReader("io.github.r1mao.TestClass");
+        ClassReader reader=new ClassReader("io.github.r1mao.algorithm.LoopChecker");
         ClassWriter writer=new ClassWriter(reader,ClassWriter.COMPUTE_MAXS);
         ClassWalker visitor=new ClassWalker(Opcodes.ASM8,writer);
         reader.accept(visitor,ClassReader.EXPAND_FRAMES);
+
+        HashSet<Integer> set=new HashSet<>(),gg;
+        set.add(1);
+        set.add(2);
+        gg= (HashSet<Integer>) set.clone();
+        gg.add(3);
+        System.out.println(set);
+        System.out.println(gg);
     }
 }

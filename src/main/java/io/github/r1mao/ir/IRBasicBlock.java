@@ -4,17 +4,26 @@ import io.github.r1mao.algorithm.Node;
 import javafx.util.Pair;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 
 public class IRBasicBlock extends Node<CodeBlock>
 {
-    private HashMap<Integer, Pair<String,String>> localVariable=new HashMap<>();
     private int stackOffset=0xdeadbeef;
     private int stackAddress=0xdeadbeef;
+    private HashSet<IRStatement> inSet=new HashSet<>(),outSet=new HashSet<>();
     public IRBasicBlock(CodeBlock data, IRMethod parent)
     {
         super(data, parent);
         data.setHolder(this);
+    }
+    protected HashSet<IRStatement> getInSet()
+    {
+        return inSet;
+    }
+    protected HashSet<IRStatement> getOutSet( )
+    {
+        return outSet;
     }
     public String getName()
     {

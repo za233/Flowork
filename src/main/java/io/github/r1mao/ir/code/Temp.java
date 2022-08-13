@@ -30,4 +30,8 @@ public class Temp extends Value
     {
         return "t"+this.getIndex();
     }
+    public static ArrayList<Temp> getAllocatedTempValue()
+    {
+        return cache;
+    }
 }

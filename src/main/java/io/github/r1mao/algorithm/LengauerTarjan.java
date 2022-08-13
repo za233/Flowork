@@ -1,5 +1,7 @@
 package io.github.r1mao.algorithm;
 
+import io.github.r1mao.ir.IRBasicBlock;
+
 import java.util.*;
 
 public class LengauerTarjan
@@ -10,6 +12,8 @@ public class LengauerTarjan
     private HashMap<Node,Integer> dfn;
     private HashMap<Node,Node> semiDom,iDom,sameDom,parent,ancestor;
     private ArrayList<Node> vertex;
+    private HashMap<Node,HashSet<Node>> DF;
+    private boolean calculated=false;
     public LengauerTarjan(Graph graph,Node start)
     {
         this.graph=graph;
@@ -59,9 +63,9 @@ public class LengauerTarjan
     {
         this.dfs(null,this.startPoint);
         HashMap<Node,Set<Node>> bucket=new HashMap<>();
-        for(Node n:this.graph.getNodes())
+        for(Node n:vertex)
             bucket.put(n, new HashSet<Node>());
-        for(int i=graph.getNodeNum()-1;i>=1;i--)
+        for(int i=vertex.size()-1;i>=1;i--)
         {
             Node n=this.vertex.get(i),p=this.parent.get(n);
             Node s=p;
@@ -89,15 +93,48 @@ public class LengauerTarjan
             }
             bucket.get(p).clear();
         }
-        for(int i=1;i<graph.getNodeNum();i++)
+        for(int i=1;i<vertex.size();i++)
         {
             Node n=this.vertex.get(i);
             if(this.sameDom.containsKey(n))
                 this.iDom.put(n,this.iDom.get(this.sameDom.get(n)));
         }
+        this.calculated=true;
+    }
+    public ArrayList<Node> getVisitedNodes()
+    {
+        assert this.calculated==true;
+        return this.vertex;
     }
     public Node getIDom(Node n)
     {
+        assert this.calculated==true;
         return this.iDom.get(n);
     }
+    public HashSet<Node> getDominateFrontier(Node node)
+    {
+        if(this.DF==null)
+        {
+            assert this.calculated==true;
+            this.DF=new HashMap<>();
+            for(Node n:this.graph.getNodes())
+                this.DF.put(n,new HashSet<>());
+            for(Node n:this.graph.getNodes())
+            {
+                List<Node> list=n.getPredecessors();
+                for(int i=0;i<list.size();i++)
+                {
+                    Node runner=list.get(i);
+                    while(runner!=this.getIDom(n))
+                    {
+                        this.DF.get(runner).add(n);
+                        runner=this.getIDom(runner);
+                    }
+                }
+            }
+
+        }
+        return this.DF.get(node);
+    }
+
 }

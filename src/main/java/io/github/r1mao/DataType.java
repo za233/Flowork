@@ -2,46 +2,40 @@ package io.github.r1mao;
 
 import org.objectweb.asm.Opcodes;
 
-import javax.xml.crypto.Data;
-import java.util.ArrayList;
-
-public class DataType
-{
-    public final static int VOID=-1,BOOLEAN=0, BYTE=1, CHAR=2, DOUBLE=3, FLOAT=4, INTEGER=5, LONG=6, REFERENCE=7, SHORT=8;
+public class DataType {
+    public final static int VOID = -1, BOOLEAN = 0, BYTE = 1, CHAR = 2, DOUBLE = 3, FLOAT = 4, INTEGER = 5, LONG = 6, REFERENCE = 7, SHORT = 8;
     private final int slotSize;
     private final int type;
-    public final static DataType TYPE_VOID=new DataType(VOID,0,null);
-    public final static DataType TYPE_BOOLEAN=new DataType(BOOLEAN,4,null);
-    public final static DataType TYPE_BYTE=new DataType(BYTE,4,null);
-    public final static DataType TYPE_CHAR=new DataType(CHAR,4,null);
-    public final static DataType TYPE_DOUBLE=new DataType(DOUBLE,8,null);
-    public final static DataType TYPE_FLOAT=new DataType(FLOAT,4,null);
-    public final static DataType TYPE_INTEGER=new DataType(INTEGER,4,null);
-    public final static DataType TYPE_LONG=new DataType(LONG,8,null);
-    public final static DataType TYPE_SHORT=new DataType(SHORT,4,null);
-    public final static DataType TYPE_REFERENCE=new DataType(REFERENCE,4,null);
-    private DataType(int type,int slotSize,String extraData)
-    {
-        this.type=type;
-        this.slotSize=slotSize;
+    public final static DataType TYPE_VOID = new DataType(VOID, 0, null);
+    public final static DataType TYPE_BOOLEAN = new DataType(BOOLEAN, 4, null);
+    public final static DataType TYPE_BYTE = new DataType(BYTE, 4, null);
+    public final static DataType TYPE_CHAR = new DataType(CHAR, 4, null);
+    public final static DataType TYPE_DOUBLE = new DataType(DOUBLE, 8, null);
+    public final static DataType TYPE_FLOAT = new DataType(FLOAT, 4, null);
+    public final static DataType TYPE_INTEGER = new DataType(INTEGER, 4, null);
+    public final static DataType TYPE_LONG = new DataType(LONG, 8, null);
+    public final static DataType TYPE_SHORT = new DataType(SHORT, 4, null);
+    public final static DataType TYPE_REFERENCE = new DataType(REFERENCE, 4, null);
+
+    private DataType(int type, int slotSize, String extraData) {
+        this.type = type;
+        this.slotSize = slotSize;
     }
-    public int getSizeInSlot()
-    {
+
+    public int getSizeInSlot() {
         return this.slotSize;
     }
-    public int getTypeId()
-    {
+
+    public int getTypeId() {
         return this.type;
     }
-    public String getTypeName()
-    {
+
+    public String getTypeName() {
         return DataType.getTypeName(this);
     }
 
-    public static String getTypeName(DataType type)
-    {
-        switch(type.getTypeId())
-        {
+    public static String getTypeName(DataType type) {
+        switch (type.getTypeId()) {
             case VOID:
                 return "void";
             case BOOLEAN:
@@ -66,10 +60,9 @@ public class DataType
                 return null;
         }
     }
-    public static DataType getTypeByTypeName(String name)
-    {
-        switch(name)
-        {
+
+    public static DataType getTypeByTypeName(String name) {
+        switch (name) {
             case "void":
                 return DataType.TYPE_VOID;
             case "boolean":
@@ -94,10 +87,9 @@ public class DataType
                 return null;
         }
     }
-    public static DataType getTypeByArrayTypeID(int id)
-    {
-        switch(id)
-        {
+
+    public static DataType getTypeByArrayTypeID(int id) {
+        switch (id) {
             case Opcodes.T_BOOLEAN:
                 return DataType.TYPE_BOOLEAN;
             case Opcodes.T_BYTE:
@@ -117,33 +109,32 @@ public class DataType
         }
         return null;
     }
-    public static DataType getTypeByObject(Object obj)
-    {;
-        String typeName=obj.getClass().getTypeName();
-        if(typeName.equals("java.lang.Integer"))
+
+    public static DataType getTypeByObject(Object obj) {
+        ;
+        String typeName = obj.getClass().getTypeName();
+        if (typeName.equals("java.lang.Integer"))
             return DataType.TYPE_INTEGER;
-        else if(typeName.equals("java.lang.Boolean"))
+        else if (typeName.equals("java.lang.Boolean"))
             return DataType.TYPE_BOOLEAN;
-        else if(typeName.equals("java.lang.Double"))
+        else if (typeName.equals("java.lang.Double"))
             return DataType.TYPE_DOUBLE;
-        else if(typeName.equals("java.lang.Float"))
+        else if (typeName.equals("java.lang.Float"))
             return DataType.TYPE_FLOAT;
-        else if(typeName.equals("java.lang.Long"))
+        else if (typeName.equals("java.lang.Long"))
             return DataType.TYPE_LONG;
-        else if(typeName.equals("java.lang.Byte"))
+        else if (typeName.equals("java.lang.Byte"))
             return DataType.TYPE_BYTE;
-        else if(typeName.equals("java.lang.Short"))
+        else if (typeName.equals("java.lang.Short"))
             return DataType.TYPE_SHORT;
-        else if(typeName.equals("java.lang.Char"))
+        else if (typeName.equals("java.lang.Char"))
             return DataType.TYPE_CHAR;
         else
             return DataType.TYPE_REFERENCE;
     }
 
-    public static DataType getType(int type)
-    {
-        switch(type)
-        {
+    public static DataType getType(int type) {
+        switch (type) {
             case VOID:
                 return TYPE_VOID;
             case BOOLEAN:
@@ -168,12 +159,12 @@ public class DataType
                 return null;
         }
     }
+
     @Override
-    public boolean equals(Object obj)
-    {
-        if(!(obj instanceof DataType))
+    public boolean equals(Object obj) {
+        if (!(obj instanceof DataType))
             return false;
-        DataType t=(DataType) obj;
-        return this.type==t.type;
+        DataType t = (DataType) obj;
+        return this.type == t.type;
     }
 }

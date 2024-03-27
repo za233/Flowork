@@ -1,42 +1,34 @@
 package io.github.r1mao;
 
-import io.github.r1mao.algorithm.DescriptorParser;
-import io.github.r1mao.ir.BytecodeWrapper;
 import org.objectweb.asm.Opcodes;
 
-import javax.xml.crypto.Data;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Stack;
 
-public class OpcodeInfo
-{
+public class OpcodeInfo {
 
-    public static boolean isJump(int opcode)
-    {
+    public static boolean isJump(int opcode) {
         return jumpInsn.contains(opcode);
     }
-    public static boolean isReturn(int opcode)
-    {
-        return  opcode==Opcodes.ATHROW || (opcode>=Opcodes.IRETURN && opcode<=Opcodes.RETURN) || opcode==Opcodes.RET;
+
+    public static boolean isReturn(int opcode) {
+        return opcode == Opcodes.ATHROW || (opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) || opcode == Opcodes.RET;
     }
-    public static boolean isConditionalJump(int opcode)
-    {
-        if(!isJump(opcode))
+
+    public static boolean isConditionalJump(int opcode) {
+        if (!isJump(opcode))
             return false;
-        if(opcode==Opcodes.GOTO || opcode==Opcodes.JSR)
+        if (opcode == Opcodes.GOTO || opcode == Opcodes.JSR)
             return false;
         return true;
     }
-    public static boolean needStackContext(int opcode)
-    {
-        return opcode==Opcodes.DUP_X2 || opcode==Opcodes.DUP2 || opcode==Opcodes.DUP2_X1 || opcode==Opcodes.DUP2_X2;
+
+    public static boolean needStackContext(int opcode) {
+        return opcode == Opcodes.DUP_X2 || opcode == Opcodes.DUP2 || opcode == Opcodes.DUP2_X1 || opcode == Opcodes.DUP2_X2;
     }
 
-    private static HashSet<Integer> jumpInsn=new HashSet<>();
-    static
-    {
+    private static HashSet<Integer> jumpInsn = new HashSet<>();
+
+    static {
 
         jumpInsn.add(Opcodes.IFEQ);
         jumpInsn.add(Opcodes.IFNE);
@@ -57,8 +49,7 @@ public class OpcodeInfo
         jumpInsn.add(Opcodes.IFNONNULL);
     }
 
-    public static boolean isSwitch(int opcode)
-    {
-        return opcode==Opcodes.TABLESWITCH || opcode==Opcodes.LOOKUPSWITCH;
+    public static boolean isSwitch(int opcode) {
+        return opcode == Opcodes.TABLESWITCH || opcode == Opcodes.LOOKUPSWITCH;
     }
 }

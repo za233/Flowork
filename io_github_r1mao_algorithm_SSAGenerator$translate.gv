@@ -1,0 +1,339 @@
+digraph translate {
+	labeljust=l
+	0 [label="block_0:
+s0_4 = this;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).visited;
+s4_4 = bb;
+s0_4 = ((java.util.HashSet)s0_4).add(s4_4);
+s0_4 = this;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).context;
+s0_4 = ((java.util.Stack)s0_4).lastElement();
+s0_4 = (java.util.HashMap) s0_4;
+s0_4 = ((java.util.HashMap)s0_4).clone();
+s0_4 = (java.util.HashMap) s0_4;
+mapping = s0_4;
+s0_4 = bb;
+s0_4 = ((io.github.r1mao.ir.IRBasicBlock)s0_4).getCode();
+s0_4 = ((io.github.r1mao.ir.CodeBlock)s0_4).getIRCode();
+s0_4 = ((java.util.LinkedList)s0_4).iterator();
+var3 = s0_4;
+"]	1 [label="block_1:
+s0_4 = var3;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_24; else goto block_2;
+"]	2 [label="block_2:
+s0_4 = var3;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.IRStatement) s0_4;
+stmt = s0_4;
+s0_4 = stmt;
+s0_4 = s0_4 instanceof io.github.r1mao.ir.code.StmtAssignment;
+if(s0_4 == 0) goto block_16; else goto block_3;
+"]	3 [label="block_3:
+s0_4 = stmt;
+s0_4 = (io.github.r1mao.ir.code.StmtAssignment) s0_4;
+assignment = s0_4;
+s0_4 = assignment;
+s0_4 = ((io.github.r1mao.ir.code.StmtAssignment)s0_4).getDefValue();
+def = s0_4;
+s0_4 = stmt;
+s0_4 = ((io.github.r1mao.ir.IRStatement)s0_4).getReadVariable();
+s0_4 = ((java.util.ArrayList)s0_4).iterator();
+var7 = s0_4;
+"]	4 [label="block_4:
+s0_4 = var7;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_12; else goto block_5;
+"]	5 [label="block_5:
+s0_4 = var7;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.code.Value) s0_4;
+v = s0_4;
+s0_4 = mapping;
+s4_4 = v;
+s0_4 = ((java.util.HashMap)s0_4).get(s4_4);
+s0_4 = (io.github.r1mao.ir.code.ssa.StaticValue) s0_4;
+staticValue = s0_4;
+s0_4 = staticValue;
+if(s0_4 != null) goto block_7; else goto block_6;
+"]	6 [label="block_6:
+s0_4 = v;
+s0_4 = (io.github.r1mao.ir.code.ssa.StaticValue).newValue(s0_4);
+staticValue = s0_4;
+s0_4 = staticValue;
+s4_4 = 1;
+((io.github.r1mao.ir.code.ssa.StaticValue)s0_4).setUndefineValue(s4_4);
+s0_4 = mapping;
+s4_4 = v;
+s8_4 = staticValue;
+s0_4 = ((java.util.HashMap)s0_4).put(s4_4, s8_4);
+"]	7 [label="block_7:
+s0_4 = def;
+if(s0_4 == null) goto block_10; else goto block_8;
+"]	8 [label="block_8:
+s0_4 = def;
+s0_4 = ((io.github.r1mao.ir.code.Value)s0_4).isLeafValue();
+if(s0_4 != 0) goto block_10; else goto block_9;
+"]	9 [label="block_9:
+s0_4 = assignment;
+s4_4 = v;
+s8_4 = staticValue;
+((io.github.r1mao.ir.code.StmtAssignment)s0_4).replaceUseOf(s4_4, s8_4);
+goto block_11;
+"]	10 [label="block_10:
+s0_4 = assignment;
+s4_4 = v;
+s8_4 = staticValue;
+((io.github.r1mao.ir.code.StmtAssignment)s0_4).replaceUseOfValue(s4_4, s8_4);
+"]	11 [label="block_11:
+s0_4 = staticValue;
+s4_4 = stmt;
+((io.github.r1mao.ir.code.ssa.StaticValue)s0_4).addUse(s4_4);
+goto block_4;
+"]	12 [label="block_12:
+s0_4 = def;
+if(s0_4 == null) goto block_15; else goto block_13;
+"]	13 [label="block_13:
+s0_4 = def;
+s0_4 = ((io.github.r1mao.ir.code.Value)s0_4).isVariableValue();
+if(s0_4 == 0) goto block_15; else goto block_14;
+"]	14 [label="block_14:
+s0_4 = def;
+s0_4 = (io.github.r1mao.ir.code.ssa.StaticValue).newValue(s0_4);
+value = s0_4;
+s0_4 = assignment;
+s4_4 = def;
+s8_4 = value;
+((io.github.r1mao.ir.code.StmtAssignment)s0_4).replaceUseOfTo(s4_4, s8_4);
+s0_4 = mapping;
+s4_4 = def;
+s8_4 = value;
+s0_4 = ((java.util.HashMap)s0_4).put(s4_4, s8_4);
+"]	15 [label="block_15:
+goto block_23;
+"]	16 [label="block_16:
+s0_4 = stmt;
+s0_4 = s0_4 instanceof io.github.r1mao.ir.code.ssa.StmtPhiNode;
+if(s0_4 == 0) goto block_18; else goto block_17;
+"]	17 [label="block_17:
+s0_4 = stmt;
+s0_4 = (io.github.r1mao.ir.code.ssa.StmtPhiNode) s0_4;
+node = s0_4;
+s0_4 = node;
+s0_4 = ((io.github.r1mao.ir.code.ssa.StmtPhiNode)s0_4).getOriginalValue();
+s0_4 = (io.github.r1mao.ir.code.ssa.StaticValue).newValue(s0_4);
+value = s0_4;
+s0_4 = mapping;
+s4_4 = node;
+s4_4 = ((io.github.r1mao.ir.code.ssa.StmtPhiNode)s4_4).getValue();
+s8_4 = value;
+s0_4 = ((java.util.HashMap)s0_4).put(s4_4, s8_4);
+s0_4 = node;
+s4_4 = node;
+s4_4 = ((io.github.r1mao.ir.code.ssa.StmtPhiNode)s4_4).getValue();
+s8_4 = value;
+((io.github.r1mao.ir.code.ssa.StmtPhiNode)s0_4).replaceUseOf(s4_4, s8_4);
+goto block_23;
+"]	18 [label="block_18:
+s0_4 = stmt;
+s0_4 = ((io.github.r1mao.ir.IRStatement)s0_4).getReadVariable();
+s0_4 = ((java.util.ArrayList)s0_4).iterator();
+var5 = s0_4;
+"]	19 [label="block_19:
+s0_4 = var5;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_23; else goto block_20;
+"]	20 [label="block_20:
+s0_4 = var5;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.code.Value) s0_4;
+v = s0_4;
+s0_4 = mapping;
+s4_4 = v;
+s0_4 = ((java.util.HashMap)s0_4).get(s4_4);
+s0_4 = (io.github.r1mao.ir.code.ssa.StaticValue) s0_4;
+staticValue = s0_4;
+s0_4 = staticValue;
+if(s0_4 != null) goto block_22; else goto block_21;
+"]	21 [label="block_21:
+s0_4 = v;
+s0_4 = (io.github.r1mao.ir.code.ssa.StaticValue).newValue(s0_4);
+staticValue = s0_4;
+s0_4 = staticValue;
+s4_4 = 1;
+((io.github.r1mao.ir.code.ssa.StaticValue)s0_4).setUndefineValue(s4_4);
+s0_4 = mapping;
+s4_4 = v;
+s8_4 = staticValue;
+s0_4 = ((java.util.HashMap)s0_4).put(s4_4, s8_4);
+"]	22 [label="block_22:
+s0_4 = stmt;
+s4_4 = v;
+s8_4 = staticValue;
+((io.github.r1mao.ir.IRStatement)s0_4).replaceUseOf(s4_4, s8_4);
+s0_4 = staticValue;
+s4_4 = stmt;
+((io.github.r1mao.ir.code.ssa.StaticValue)s0_4).addUse(s4_4);
+goto block_19;
+"]	23 [label="block_23:
+goto block_1;
+"]	24 [label="block_24:
+s0_4 = this;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).method;
+((io.github.r1mao.ir.IRMethod)s0_4).dump();
+s0_4 = bb;
+s0_4 = ((io.github.r1mao.ir.IRBasicBlock)s0_4).getSuccessors();
+s0_4 = ((java.util.ArrayList)s0_4).iterator();
+var3 = s0_4;
+"]	25 [label="block_25:
+s0_4 = var3;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_34; else goto block_26;
+"]	26 [label="block_26:
+s0_4 = var3;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.algorithm.Node) s0_4;
+n = s0_4;
+s0_4 = n;
+s0_4 = (io.github.r1mao.ir.IRBasicBlock) s0_4;
+scc = s0_4;
+s0_4 = scc;
+s0_4 = ((io.github.r1mao.ir.IRBasicBlock)s0_4).getCode();
+s0_4 = ((io.github.r1mao.ir.CodeBlock)s0_4).getIRCode();
+s0_4 = ((java.util.LinkedList)s0_4).iterator();
+var6 = s0_4;
+"]	27 [label="block_27:
+s0_4 = var6;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_33; else goto block_28;
+"]	28 [label="block_28:
+s0_4 = var6;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.IRStatement) s0_4;
+stmt = s0_4;
+s0_4 = stmt;
+s0_4 = s0_4 instanceof io.github.r1mao.ir.code.ssa.StmtPhiNode;
+if(s0_4 != 0) goto block_30; else goto block_29;
+"]	29 [label="block_29:
+goto block_33;
+"]	30 [label="block_30:
+s0_4 = stmt;
+s0_4 = (io.github.r1mao.ir.code.ssa.StmtPhiNode) s0_4;
+phiNode = s0_4;
+s0_4 = phiNode;
+s0_4 = ((io.github.r1mao.ir.code.ssa.StmtPhiNode)s0_4).getOriginalValue();
+var = s0_4;
+s0_4 = mapping;
+s4_4 = var;
+s0_4 = ((java.util.HashMap)s0_4).get(s4_4);
+s0_4 = (io.github.r1mao.ir.code.ssa.StaticValue) s0_4;
+staticValue = s0_4;
+s0_4 = staticValue;
+if(s0_4 == null) goto block_32; else goto block_31;
+"]	31 [label="block_31:
+s0_4 = staticValue;
+s4_4 = stmt;
+((io.github.r1mao.ir.code.ssa.StaticValue)s0_4).addUse(s4_4);
+"]	32 [label="block_32:
+s0_4 = phiNode;
+s4_4 = bb;
+s8_4 = staticValue;
+((io.github.r1mao.ir.code.ssa.StmtPhiNode)s0_4).addEdge(s4_4, s8_4);
+goto block_27;
+"]	33 [label="block_33:
+goto block_25;
+"]	34 [label="block_34:
+s0_4 = bb;
+s0_4 = ((io.github.r1mao.ir.IRBasicBlock)s0_4).getSuccessors();
+s0_4 = ((java.util.ArrayList)s0_4).iterator();
+var3 = s0_4;
+"]	35 [label="block_35:
+s0_4 = var3;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_39; else goto block_36;
+"]	36 [label="block_36:
+s0_4 = var3;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.algorithm.Node) s0_4;
+n = s0_4;
+s0_4 = n;
+s0_4 = (io.github.r1mao.ir.IRBasicBlock) s0_4;
+scc = s0_4;
+s0_4 = this;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).visited;
+s4_4 = scc;
+s0_4 = ((java.util.HashSet)s0_4).contains(s4_4);
+if(s0_4 == 0) goto block_38; else goto block_37;
+"]	37 [label="block_37:
+goto block_35;
+"]	38 [label="block_38:
+s0_4 = this;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).context;
+s4_4 = mapping;
+s0_4 = ((java.util.Stack)s0_4).push(s4_4);
+s0_4 = this;
+s4_4 = scc;
+((io.github.r1mao.algorithm.SSAGenerator)s0_4).translate(s4_4);
+s0_4 = this;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).context;
+s0_4 = ((java.util.Stack)s0_4).pop();
+goto block_35;
+"]	39 [label="block_39:
+return;
+"]	0 -> 1
+	1 -> 24
+	1 -> 2
+	2 -> 16
+	2 -> 3
+	3 -> 4
+	4 -> 12
+	4 -> 5
+	5 -> 7
+	5 -> 6
+	6 -> 7
+	7 -> 10
+	7 -> 8
+	8 -> 10
+	8 -> 9
+	9 -> 11
+	10 -> 11
+	11 -> 4
+	12 -> 15
+	12 -> 13
+	13 -> 15
+	13 -> 14
+	14 -> 15
+	15 -> 23
+	16 -> 18
+	16 -> 17
+	17 -> 23
+	18 -> 19
+	19 -> 23
+	19 -> 20
+	20 -> 22
+	20 -> 21
+	21 -> 22
+	22 -> 19
+	23 -> 1
+	24 -> 25
+	25 -> 34
+	25 -> 26
+	26 -> 27
+	27 -> 33
+	27 -> 28
+	28 -> 30
+	28 -> 29
+	29 -> 33
+	30 -> 32
+	30 -> 31
+	31 -> 32
+	32 -> 27
+	33 -> 25
+	34 -> 35
+	35 -> 39
+	35 -> 36
+	36 -> 38
+	36 -> 37
+	37 -> 35
+	38 -> 35
+}

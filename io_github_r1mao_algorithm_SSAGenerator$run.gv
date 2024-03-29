@@ -1,0 +1,177 @@
+digraph run {
+	labeljust=l
+	0 [label="block_0:
+s0_4 = new java.util.ArrayList();
+s4_4 = s0_4;
+((java.util.ArrayList)s4_4).<init>();
+entryBlocks = s0_4;
+s0_4 = this;
+s4_4 = this;
+s4_4 = ((io.github.r1mao.algorithm.SSAGenerator)s4_4).method;
+s4_4 = ((io.github.r1mao.ir.IRMethod)s4_4).getEntryBlock();
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).getPhiMap(s4_4);
+phiMap = s0_4;
+s0_4 = entryBlocks;
+s4_4 = this;
+s4_4 = ((io.github.r1mao.algorithm.SSAGenerator)s4_4).method;
+s4_4 = ((io.github.r1mao.ir.IRMethod)s4_4).getEntryBlock();
+s0_4 = ((java.util.ArrayList)s0_4).add(s4_4);
+s0_4 = this;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).method;
+s0_4 = ((io.github.r1mao.ir.IRMethod)s0_4).getTryCatchHandlerBlocks();
+s0_4 = ((java.util.ArrayList)s0_4).iterator();
+var4 = s0_4;
+"]	1 [label="block_1:
+s0_4 = var4;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_9; else goto block_2;
+"]	2 [label="block_2:
+s0_4 = var4;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.IRBasicBlock) s0_4;
+b = s0_4;
+s0_4 = entryBlocks;
+s4_4 = b;
+s0_4 = ((java.util.ArrayList)s0_4).add(s4_4);
+s0_4 = this;
+s4_4 = b;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).getPhiMap(s4_4);
+tmp = s0_4;
+s0_4 = tmp;
+s0_4 = ((java.util.HashMap)s0_4).keySet();
+s0_4 = ((java.util.Set)s0_4).iterator();
+var6 = s0_4;
+"]	3 [label="block_3:
+s0_4 = var6;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_8; else goto block_4;
+"]	4 [label="block_4:
+s0_4 = var6;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.IRBasicBlock) s0_4;
+t = s0_4;
+s0_4 = phiMap;
+s4_4 = t;
+s0_4 = ((java.util.HashMap)s0_4).get(s4_4);
+if(s0_4 == null) goto block_6; else goto block_5;
+"]	5 [label="block_5:
+s0_4 = phiMap;
+s4_4 = t;
+s0_4 = ((java.util.HashMap)s0_4).get(s4_4);
+s0_4 = (java.util.HashSet) s0_4;
+s4_4 = tmp;
+s8_4 = t;
+s4_4 = ((java.util.HashMap)s4_4).get(s8_4);
+s4_4 = (java.util.Collection) s4_4;
+s0_4 = ((java.util.HashSet)s0_4).addAll(s4_4);
+goto block_7;
+"]	6 [label="block_6:
+s0_4 = phiMap;
+s4_4 = t;
+s8_4 = tmp;
+s12_4 = t;
+s8_4 = ((java.util.HashMap)s8_4).get(s12_4);
+s8_4 = (java.util.HashSet) s8_4;
+s0_4 = ((java.util.HashMap)s0_4).put(s4_4, s8_4);
+"]	7 [label="block_7:
+goto block_3;
+"]	8 [label="block_8:
+goto block_1;
+"]	9 [label="block_9:
+s0_4 = phiMap;
+s0_4 = ((java.util.HashMap)s0_4).keySet();
+s0_4 = ((java.util.Set)s0_4).iterator();
+var4 = s0_4;
+"]	10 [label="block_10:
+s0_4 = var4;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_15; else goto block_11;
+"]	11 [label="block_11:
+s0_4 = var4;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.IRBasicBlock) s0_4;
+bb = s0_4;
+s0_4 = phiMap;
+s4_4 = bb;
+s0_4 = ((java.util.HashMap)s0_4).get(s4_4);
+s0_4 = (java.util.HashSet) s0_4;
+s0_4 = ((java.util.HashSet)s0_4).iterator();
+var6 = s0_4;
+"]	12 [label="block_12:
+s0_4 = var6;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_14; else goto block_13;
+"]	13 [label="block_13:
+s0_4 = var6;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.code.Value) s0_4;
+v = s0_4;
+s0_4 = new io.github.r1mao.ir.code.ssa.StmtPhiNode();
+s4_4 = s0_4;
+s8_4 = v;
+((io.github.r1mao.ir.code.ssa.StmtPhiNode)s4_4).<init>(s8_4);
+phi = s0_4;
+s0_4 = bb;
+s0_4 = ((io.github.r1mao.ir.IRBasicBlock)s0_4).getCode();
+s0_4 = ((io.github.r1mao.ir.CodeBlock)s0_4).getIRCode();
+s4_4 = phi;
+((java.util.LinkedList)s0_4).addFirst(s4_4);
+s0_4 = phi;
+s4_4 = bb;
+s4_4 = ((io.github.r1mao.ir.IRBasicBlock)s4_4).getCode();
+((io.github.r1mao.ir.code.ssa.StmtPhiNode)s0_4).setHolder(s4_4);
+goto block_12;
+"]	14 [label="block_14:
+goto block_10;
+"]	15 [label="block_15:
+s0_4 = this;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).context;
+s4_4 = new java.util.HashMap();
+s8_4 = s4_4;
+((java.util.HashMap)s8_4).<init>();
+s0_4 = ((java.util.Stack)s0_4).push(s4_4);
+s0_4 = entryBlocks;
+s0_4 = ((java.util.ArrayList)s0_4).iterator();
+var4 = s0_4;
+"]	16 [label="block_16:
+s0_4 = var4;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_18; else goto block_17;
+"]	17 [label="block_17:
+s0_4 = var4;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.IRBasicBlock) s0_4;
+bb = s0_4;
+s0_4 = this;
+s4_4 = bb;
+((io.github.r1mao.algorithm.SSAGenerator)s0_4).translate(s4_4);
+goto block_16;
+"]	18 [label="block_18:
+s0_4 = this;
+((io.github.r1mao.algorithm.SSAGenerator)s0_4).deleteRubbishCode();
+return;
+"]	0 -> 1
+	1 -> 9
+	1 -> 2
+	2 -> 3
+	3 -> 8
+	3 -> 4
+	4 -> 6
+	4 -> 5
+	5 -> 7
+	6 -> 7
+	7 -> 3
+	8 -> 1
+	9 -> 10
+	10 -> 15
+	10 -> 11
+	11 -> 12
+	12 -> 14
+	12 -> 13
+	13 -> 12
+	14 -> 10
+	15 -> 16
+	16 -> 18
+	16 -> 17
+	17 -> 16
+}

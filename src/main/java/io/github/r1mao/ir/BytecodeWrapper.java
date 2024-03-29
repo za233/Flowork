@@ -1,7 +1,7 @@
 package io.github.r1mao.ir;
 
 import io.github.r1mao.DataType;
-import io.github.r1mao.Util.Pair;
+import io.github.r1mao.utils.Pair;
 import io.github.r1mao.algorithm.DescriptorParser;
 
 import java.util.HashMap;

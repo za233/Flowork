@@ -1,0 +1,27 @@
+digraph <init> {
+	labeljust=l
+	0 [label="block_0:
+s0_4 = this;
+((java.lang.Object)s0_4).<init>();
+s0_4 = this;
+s4_4 = new java.util.HashSet();
+s8_4 = s4_4;
+((java.util.HashSet)s8_4).<init>();
+((io.github.r1mao.algorithm.SSAGenerator)s0_4).visited = s4_4;
+s0_4 = this;
+s4_4 = new java.util.HashSet();
+s8_4 = s4_4;
+((java.util.HashSet)s8_4).<init>();
+((io.github.r1mao.algorithm.SSAGenerator)s0_4).path = s4_4;
+s0_4 = this;
+s4_4 = new java.util.Stack();
+s8_4 = s4_4;
+((java.util.Stack)s8_4).<init>();
+((io.github.r1mao.algorithm.SSAGenerator)s0_4).context = s4_4;
+s0_4 = this;
+s4_4 = method;
+((io.github.r1mao.algorithm.SSAGenerator)s0_4).method = s4_4;
+s0_4 = this;
+((io.github.r1mao.algorithm.SSAGenerator)s0_4).getGlobalName();
+return;
+"]}

@@ -1,0 +1,140 @@
+digraph getPhiMap {
+	labeljust=l
+	0 [label="block_0:
+s0_4 = new io.github.r1mao.algorithm.LengauerTarjan();
+s4_4 = s0_4;
+s8_4 = this;
+s8_4 = ((io.github.r1mao.algorithm.SSAGenerator)s8_4).method;
+s12_4 = entry;
+((io.github.r1mao.algorithm.LengauerTarjan)s4_4).<init>(s8_4, s12_4);
+obj = s0_4;
+s0_4 = obj;
+((io.github.r1mao.algorithm.LengauerTarjan)s0_4).run();
+s0_4 = new java.util.HashMap();
+s4_4 = s0_4;
+((java.util.HashMap)s4_4).<init>();
+phiMap = s0_4;
+s0_4 = this;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).globalVar;
+s0_4 = ((java.util.HashSet)s0_4).iterator();
+var4 = s0_4;
+"]	1 [label="block_1:
+s0_4 = var4;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_15; else goto block_2;
+"]	2 [label="block_2:
+s0_4 = var4;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.code.Value) s0_4;
+g = s0_4;
+s0_4 = this;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).blocks;
+s4_4 = g;
+s0_4 = ((java.util.HashMap)s0_4).get(s4_4);
+if(s0_4 != null) goto block_4; else goto block_3;
+"]	3 [label="block_3:
+s0_4 = this;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).blocks;
+s4_4 = g;
+s8_4 = new java.util.HashSet();
+s12_4 = s8_4;
+((java.util.HashSet)s12_4).<init>();
+s0_4 = ((java.util.HashMap)s0_4).put(s4_4, s8_4);
+"]	4 [label="block_4:
+s0_4 = new java.util.LinkedList();
+s4_4 = s0_4;
+s8_4 = this;
+s8_4 = ((io.github.r1mao.algorithm.SSAGenerator)s8_4).blocks;
+s12_4 = g;
+s8_4 = ((java.util.HashMap)s8_4).get(s12_4);
+s8_4 = (java.util.Collection) s8_4;
+((java.util.LinkedList)s4_4).<init>(s8_4);
+workList = s0_4;
+"]	5 [label="block_5:
+s0_4 = workList;
+s0_4 = ((java.util.LinkedList)s0_4).isEmpty();
+if(s0_4 != 0) goto block_14; else goto block_6;
+"]	6 [label="block_6:
+s0_4 = workList;
+s0_4 = ((java.util.LinkedList)s0_4).removeFirst();
+s0_4 = (io.github.r1mao.ir.IRBasicBlock) s0_4;
+bb = s0_4;
+s0_4 = obj;
+s4_4 = bb;
+s0_4 = ((io.github.r1mao.algorithm.LengauerTarjan)s0_4).getDominateFrontier(s4_4);
+s0_4 = ((java.util.HashSet)s0_4).iterator();
+var8 = s0_4;
+"]	7 [label="block_7:
+s0_4 = var8;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_13; else goto block_8;
+"]	8 [label="block_8:
+s0_4 = var8;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.algorithm.Node) s0_4;
+n = s0_4;
+s0_4 = n;
+s0_4 = (io.github.r1mao.ir.IRBasicBlock) s0_4;
+df = s0_4;
+s0_4 = phiMap;
+s4_4 = df;
+s0_4 = ((java.util.HashMap)s0_4).get(s4_4);
+s0_4 = (java.util.HashSet) s0_4;
+phiNodes = s0_4;
+s0_4 = phiNodes;
+if(s0_4 != null) goto block_10; else goto block_9;
+"]	9 [label="block_9:
+s0_4 = phiMap;
+s4_4 = df;
+s8_4 = new java.util.HashSet();
+s12_4 = s8_4;
+((java.util.HashSet)s12_4).<init>();
+s0_4 = ((java.util.HashMap)s0_4).put(s4_4, s8_4);
+"]	10 [label="block_10:
+s0_4 = phiMap;
+s4_4 = df;
+s0_4 = ((java.util.HashMap)s0_4).get(s4_4);
+s0_4 = (java.util.HashSet) s0_4;
+phiNodes = s0_4;
+s0_4 = phiNodes;
+s4_4 = g;
+s0_4 = ((java.util.HashSet)s0_4).contains(s4_4);
+if(s0_4 != 0) goto block_12; else goto block_11;
+"]	11 [label="block_11:
+s0_4 = phiNodes;
+s4_4 = g;
+s0_4 = ((java.util.HashSet)s0_4).add(s4_4);
+s0_4 = workList;
+s4_4 = df;
+((java.util.LinkedList)s0_4).addLast(s4_4);
+"]	12 [label="block_12:
+goto block_7;
+"]	13 [label="block_13:
+goto block_5;
+"]	14 [label="block_14:
+goto block_1;
+"]	15 [label="block_15:
+s0_4 = phiMap;
+return s0_4;
+"]	0 -> 1
+	1 -> 15
+	1 -> 2
+	2 -> 4
+	2 -> 3
+	3 -> 4
+	4 -> 5
+	5 -> 14
+	5 -> 6
+	6 -> 7
+	7 -> 13
+	7 -> 8
+	8 -> 10
+	8 -> 9
+	9 -> 10
+	10 -> 12
+	10 -> 11
+	11 -> 12
+	12 -> 7
+	13 -> 5
+	14 -> 1
+}

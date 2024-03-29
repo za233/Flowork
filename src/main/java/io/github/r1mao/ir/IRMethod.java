@@ -1,7 +1,7 @@
 package io.github.r1mao.ir;
 
 import io.github.r1mao.DataType;
-import io.github.r1mao.Util.Pair;
+import io.github.r1mao.utils.Pair;
 import io.github.r1mao.algorithm.Graph;
 import io.github.r1mao.algorithm.LoopChecker;
 import io.github.r1mao.algorithm.Node;
@@ -132,7 +132,6 @@ public class IRMethod extends Graph {
         for (Node n : this.getNodes()) {
             IRBasicBlock bb = (IRBasicBlock) n;
             bb.getCode().makeIRCode();
-
         }
 
     }
@@ -190,7 +189,9 @@ public class IRMethod extends Graph {
 
         return;
     }
+    public void simplify() {
 
+    }
     private void reachDefineAnalyse() {
         for (Node n : this.getNodes()) {
             IRBasicBlock bb = (IRBasicBlock) n;
@@ -201,7 +202,6 @@ public class IRMethod extends Graph {
         while (flag) {
             flag = false;
             for (Node n : this.getNodes()) {
-
                 IRBasicBlock bb = (IRBasicBlock) n;
                 int size = bb.getInSet().size();
                 for (Node p : bb.getPredecessors()) {
@@ -218,7 +218,7 @@ public class IRMethod extends Graph {
 
             }
         }
-        /*for(Node n:this.getNodes())
+        for(Node n:this.getNodes())
         {
             IRBasicBlock bb = (IRBasicBlock) n;
 
@@ -231,6 +231,6 @@ public class IRMethod extends Graph {
             for(IRStatement statement:bb.getOutSet())
                 System.out.println("at "+statement.getHolder().getHolder().getName()+" -> "+statement.dump());
             System.out.println("\n");
-        }*/
+        }
     }
 }

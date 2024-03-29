@@ -1,6 +1,6 @@
 package io.github.r1mao.algorithm;
 
-import io.github.r1mao.Util.Pair;
+import io.github.r1mao.utils.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -59,4 +59,5 @@ public class IRBasicBlock extends Node<CodeBlock> {
     public int getStackAddress() {
         return this.stackAddress;
     }
+
 }

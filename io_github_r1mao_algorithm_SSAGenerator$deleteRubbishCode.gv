@@ -1,0 +1,163 @@
+digraph deleteRubbishCode {
+	labeljust=l
+	0 [label="block_0:
+s0_4 = 0;
+result = s0_4;
+s0_4 = this;
+s0_4 = ((io.github.r1mao.algorithm.SSAGenerator)s0_4).method;
+s0_4 = ((io.github.r1mao.ir.IRMethod)s0_4).getBasicBlocks();
+s0_4 = ((java.util.ArrayList)s0_4).iterator();
+var2 = s0_4;
+"]	1 [label="block_1:
+s0_4 = var2;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_19; else goto block_2;
+"]	2 [label="block_2:
+s0_4 = var2;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.IRBasicBlock) s0_4;
+bb = s0_4;
+s0_4 = new java.util.ArrayList();
+s4_4 = s0_4;
+((java.util.ArrayList)s4_4).<init>();
+rubbishCode = s0_4;
+s0_4 = bb;
+s0_4 = ((io.github.r1mao.ir.IRBasicBlock)s0_4).getCode();
+s0_4 = ((io.github.r1mao.ir.CodeBlock)s0_4).getIRCode();
+s0_4 = ((java.util.LinkedList)s0_4).iterator();
+var5 = s0_4;
+"]	3 [label="block_3:
+s0_4 = var5;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_15; else goto block_4;
+"]	4 [label="block_4:
+s0_4 = var5;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.IRStatement) s0_4;
+stmt = s0_4;
+s0_4 = stmt;
+s0_4 = s0_4 instanceof io.github.r1mao.ir.code.StmtAssignment;
+if(s0_4 == 0) goto block_10; else goto block_5;
+"]	5 [label="block_5:
+s0_4 = stmt;
+s0_4 = (io.github.r1mao.ir.code.StmtAssignment) s0_4;
+assign = s0_4;
+s0_4 = assign;
+s0_4 = ((io.github.r1mao.ir.code.StmtAssignment)s0_4).getDefValue();
+def = s0_4;
+s0_4 = def;
+if(s0_4 == null) goto block_9; else goto block_6;
+"]	6 [label="block_6:
+s0_4 = def;
+s0_4 = ((io.github.r1mao.ir.code.Value)s0_4).getValueType();
+s4_4 = (io.github.r1mao.ir.code.Value).STATIC_VALUE;
+if(s0_4 != s4_4) goto block_9; else goto block_7;
+"]	7 [label="block_7:
+s0_4 = def;
+s0_4 = (io.github.r1mao.ir.code.ssa.StaticValue) s0_4;
+staticValue = s0_4;
+s0_4 = staticValue;
+s0_4 = ((io.github.r1mao.ir.code.ssa.StaticValue)s0_4).getUsers();
+s0_4 = ((java.util.ArrayList)s0_4).size();
+if(s0_4 != 0) goto block_9; else goto block_8;
+"]	8 [label="block_8:
+s0_4 = rubbishCode;
+s4_4 = assign;
+s0_4 = ((java.util.ArrayList)s0_4).add(s4_4);
+s0_4 = 1;
+result = s0_4;
+s0_4 = staticValue;
+(io.github.r1mao.ir.code.ssa.StaticValue).releaseValue(s0_4);
+"]	9 [label="block_9:
+goto block_14;
+"]	10 [label="block_10:
+s0_4 = stmt;
+s0_4 = s0_4 instanceof io.github.r1mao.ir.code.ssa.StmtPhiNode;
+if(s0_4 == 0) goto block_14; else goto block_11;
+"]	11 [label="block_11:
+s0_4 = stmt;
+s0_4 = (io.github.r1mao.ir.code.ssa.StmtPhiNode) s0_4;
+phiNode = s0_4;
+s0_4 = phiNode;
+s0_4 = ((io.github.r1mao.ir.code.ssa.StmtPhiNode)s0_4).getValue();
+def = s0_4;
+s0_4 = def;
+s0_4 = ((io.github.r1mao.ir.code.Value)s0_4).getValueType();
+s4_4 = (io.github.r1mao.ir.code.Value).STATIC_VALUE;
+if(s0_4 != s4_4) goto block_14; else goto block_12;
+"]	12 [label="block_12:
+s0_4 = def;
+s0_4 = (io.github.r1mao.ir.code.ssa.StaticValue) s0_4;
+staticValue = s0_4;
+s0_4 = staticValue;
+s0_4 = ((io.github.r1mao.ir.code.ssa.StaticValue)s0_4).getUsers();
+s0_4 = ((java.util.ArrayList)s0_4).size();
+if(s0_4 != 0) goto block_14; else goto block_13;
+"]	13 [label="block_13:
+s0_4 = rubbishCode;
+s4_4 = phiNode;
+s0_4 = ((java.util.ArrayList)s0_4).add(s4_4);
+s0_4 = 1;
+result = s0_4;
+s0_4 = staticValue;
+(io.github.r1mao.ir.code.ssa.StaticValue).releaseValue(s0_4);
+"]	14 [label="block_14:
+goto block_3;
+"]	15 [label="block_15:
+s0_4 = rubbishCode;
+s0_4 = ((java.util.ArrayList)s0_4).iterator();
+var5 = s0_4;
+"]	16 [label="block_16:
+s0_4 = var5;
+s0_4 = ((java.util.Iterator)s0_4).hasNext();
+if(s0_4 == 0) goto block_18; else goto block_17;
+"]	17 [label="block_17:
+s0_4 = var5;
+s0_4 = ((java.util.Iterator)s0_4).next();
+s0_4 = (io.github.r1mao.ir.IRStatement) s0_4;
+stmt = s0_4;
+s0_4 = bb;
+s0_4 = ((io.github.r1mao.ir.IRBasicBlock)s0_4).getCode();
+s0_4 = ((io.github.r1mao.ir.CodeBlock)s0_4).getIRCode();
+s4_4 = stmt;
+s0_4 = ((java.util.LinkedList)s0_4).remove(s4_4);
+goto block_16;
+"]	18 [label="block_18:
+goto block_1;
+"]	19 [label="block_19:
+s0_4 = result;
+if(s0_4 != 0) goto block_0; else goto block_20;
+"]	20 [label="block_20:
+return;
+"]	0 -> 1
+	1 -> 19
+	1 -> 2
+	2 -> 3
+	3 -> 15
+	3 -> 4
+	4 -> 10
+	4 -> 5
+	5 -> 9
+	5 -> 6
+	6 -> 9
+	6 -> 7
+	7 -> 9
+	7 -> 8
+	8 -> 9
+	9 -> 14
+	10 -> 14
+	10 -> 11
+	11 -> 14
+	11 -> 12
+	12 -> 14
+	12 -> 13
+	13 -> 14
+	14 -> 3
+	15 -> 16
+	16 -> 18
+	16 -> 17
+	17 -> 16
+	18 -> 1
+	19 -> 0
+	19 -> 20
+}

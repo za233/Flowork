@@ -1,7 +1,6 @@
 package io.github.r1mao.ir;
 
 import io.github.r1mao.DataType;
-import io.github.r1mao.OpcodeInfo;
 import io.github.r1mao.algorithm.DescriptorParser;
 import io.github.r1mao.ir.code.*;
 import org.objectweb.asm.Opcodes;
